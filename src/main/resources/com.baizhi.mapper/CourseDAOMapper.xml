@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.dao.CourseDAO">
+    <resultMap id="rs" type="com.baizhi.entity.Course">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="marking" property="marking"/>
+        <result column="createTime" property="createTime"/>
+        <result column="userId" property="userId"/>
+        <collection property="user" ofType="com.baizhi.entity.User">
+            <id column="uid" property="id"/>
+            <result column="phoneNumber" property="phoneNumber"/>
+            <result column="username" property="username"/>
+            <result column="password" property="password"/>
+            <result column="province" property="province"/>
+            <result column="city" property="city"/>
+            <result column="nickname" property="nickname"/>
+            <result column="sex" property="sex"/>
+            <result column="sign" property="sign"/>
+            <result column="headPic" property="headPic"/>
+            <result column="status" property="status"/>
+            <result column="registDate" property="registDate"/>
+        </collection>
+    </resultMap>
+
+    <select id="queryAll" resultMap="rs">
+      select c.id,c.title,c.marking,c.createTime,c.userId,u.id uid,u.phoneNumber,u.username,u.password,u.province,u.city,u.nickname,u.sex,u.sign,u.headPic,u.status,u.registDate
+      from course c inner join user u
+      on u.id=c.userId
+    </select>
+
+    <select id="queryByPage" resultMap="rs">
+      select c.id,c.title,c.marking,c.createTime,c.userId,u.id uid,u.phoneNumber,u.username,u.password,u.province,u.city,u.nickname,u.sex,u.sign,u.headPic,u.status,u.registDate
+      from course c inner join user u
+      on u.id=c.userId
+      limit #{start},#{rows}
+    </select>
+
+    <select id="queryTotal" resultType="long">
+        select count(id) from course
+    </select>
+
+    <insert id="insertCourse" parameterType="com.baizhi.entity.Course">
+        insert into course values(#{id},#{title},#{marking},#{createTime},#{userId} )
+    </insert>
+
+    <delete id="deleteCourse">
+        delete from course where id in
+        <foreach collection="id" item="id" separator="," close=")" open="(">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="queryOneById" parameterType="int" resultMap="rs">
+      select c.id,c.title,c.marking,c.createTime,c.userId,u.id uid,u.phoneNumber,u.username,u.password,u.province,u.city,u.nickname,u.sex,u.sign,u.headPic,u.status,u.registDate
+      from course c inner join user u
+      on u.id=c.userId
+      where c.id=#{id}
+    </select>
+
+    <update id="updateCourse" parameterType="com.baizhi.entity.Course">
+        update course set title=#{title},marking=#{marking},createTime=#{createTime},userId=#{userId}
+        where id=#{id}
+    </update>
+
+</mapper>

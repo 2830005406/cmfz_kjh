@@ -1,0 +1,33 @@
+#logo{
+   /* border: 1px solid red;*/
+    width: 160px;
+    height: 35px;
+    display: inline-block;
+    background: url('../img/header_logo.gif') no-repeat;
+    background-size:100% 100%;
+    margin-top: 3px;
+
+}
+#title{
+   /* border: 1px solid red;*/
+    font-size: 20px;
+    font-weight:bold;
+    display: inline-block;
+    -webkit-transform: translateY(-10px);
+}
+#welcome{
+/*    border: 1px solid red;*/
+    position: absolute;
+    top: 14px;
+    right: 266px;
+}
+#modifyPwd{
+    position: absolute;
+    top: 8px;
+    right: 150px;
+}
+#logout{
+    position: absolute;
+    top: 8px;
+    right: 50px;
+}

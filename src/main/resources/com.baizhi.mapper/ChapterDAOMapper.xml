@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.dao.ChapterDAO">
+    <resultMap id="rs" type="com.baizhi.entity.Chapter">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="size" property="size"/>
+        <result column="duration" property="duration"/>
+        <result column="downPath" property="downPath"/>
+        <result column="uploadTime" property="uploadTime"/>
+        <result column="albumId" property="albumId"/>
+        <association property="children" javaType="com.baizhi.entity.Album">
+            <id column="fid" property="id"/>
+            <result column="ftitle" property="title"/>
+            <result column="fpublishDate" property="publishDate"/>
+            <result column="fcount" property="count"/>
+            <result column="fcoverImg" property="coverImg"/>
+            <result column="fstar" property="star"/>
+            <result column="fauthor" property="author"/>
+            <result column="fbroadCast" property="broadCast"/>
+            <result column="fbrief" property="brief"/>
+        </association>
+    </resultMap>
+
+    <select id="queryByPage" resultMap="rs">
+      select c.id,c.title,c.size,c.duration,c.downPath,c.uploadTime,c.albumId,a.id fid,a.title ftitle,a.publishDate fpublishDate,
+      a.count fcount,a.coverImg fcoverImg,a.star fstar,a.author fauthor,a.broadCast fbroadCast,a.brief fbrief
+      from chapter c inner join album a
+      on c.albumId=a.id
+      limit #{start},#{rows}
+    </select>
+
+    <select id="queryAll" resultMap="rs">
+      select c.id,c.title,c.size,c.duration,c.downPath,c.uploadTime,c.albumId,a.id fid,a.title ftitle,a.publishDate fpublishDate,
+      a.count fcount,a.coverImg fcoverImg,a.star fstar,a.author fauthor,a.broadCast fbroadCast,a.brief fbrief
+      from chapter c inner join album a
+      on c.albumId=a.id
+    </select>
+
+    <select id="queryTotal" resultType="long">
+        select count(id) from chapter
+    </select>
+
+    <insert id="insertChapter" parameterType="com.baizhi.entity.Chapter">
+        insert into chapter values(#{id},#{title},#{size},#{duration},#{downPath},#{uploadTime},#{albumId})
+    </insert>
+
+    <delete id="deleteChapter">
+        delete from chapter where id in
+        <foreach collection="id" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

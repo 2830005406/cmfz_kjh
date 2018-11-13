@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.dao.ArticleDAO">
+    <resultMap id="rs" type="com.baizhi.entity.Article">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="imgPath" property="imgPath"/>
+        <result column="content" property="content"/>
+        <result column="publishDate" property="publishDate"/>
+        <association property="guru" javaType="com.baizhi.entity.Guru">
+            <id column="zid" property="id"/>
+            <result column="name" property="name"/>
+            <result column="headPic" property="headPic"/>
+            <result column="sex" property="sex"/>
+        </association>
+    </resultMap>
+
+    <select id="queryAll" resultMap="rs">
+      select a.id,a.title,a.imgPath,a.content,a.publishDate,a.guruId,g.id zid,g.name,g.headPic,g.sex
+      from article a inner join guru g
+      on a.guruId=g.id
+    </select>
+
+    <select id="queryByPage" resultMap="rs">
+      select a.id,a.title,a.imgPath,a.content,a.publishDate,a.guruId,g.id zid,g.name,g.headPic,g.sex
+      from article a inner join guru g
+      on a.guruId=g.id limit #{start},#{rows}
+    </select>
+
+    <select id="queryTotal" resultType="long">
+        select count(id) from article
+    </select>
+
+    <delete id="deleteArticle">
+        delete from article where id in
+        <foreach collection="id" item="id" separator="," close=")" open="(">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="queryOneById" parameterType="int" resultType="com.baizhi.entity.Article">
+        select id,title,imgPath,content,publishDate,guruId from article where id=#{id}
+    </select>
+
+    <update id="updateArticle" parameterType="com.baizhi.entity.Article">
+        update article set title=#{title},imgPath=#{imgPath},content=#{content},publishDate=#{publishDate},guruId=#{guruId}
+        where id=#{id}
+    </update>
+
+    <insert id="insertArticle" parameterType="com.baizhi.entity.Article">
+        insert into article values(#{id},#{title},#{imgPath},#{content},#{publishDate},#{guruId} )
+    </insert>
+
+</mapper>

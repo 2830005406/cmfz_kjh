@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.dao.AlbumDAO">
+
+    <select id="queryByPage" resultType="com.baizhi.entity.Album">
+      select id,title,publishDate,count,coverImg,star,author,broadCast,brief from album limit #{start},#{rows}
+    </select>
+
+    <select id="queryTotal" resultType="long">
+        select count(id) from album
+    </select>
+
+    <select id="queryAll" resultType="com.baizhi.entity.Album">
+      select id,title,publishDate,count,coverImg,star,author,broadCast,brief from album
+    </select>
+
+    <insert id="insertAlbum" parameterType="com.baizhi.entity.Album">
+        insert into album values(#{id},#{title},#{publishDate},#{count},#{coverImg},#{star},#{author},#{broadCast},#{brief} )
+    </insert>
+
+    <update id="updateAlbum" parameterType="com.baizhi.entity.Album">
+        update album set title=#{title},publishDate=#{publishDate},count=#{count},coverImg=#{coverImg},star=#{star},author=#{author},broadCast=#{broadCast},brief=#{brief} where id=#{id}
+    </update>
+
+    <select id="queryOneById" parameterType="int" resultType="com.baizhi.entity.Album">
+      select id,title,publishDate,count,coverImg,star,author,broadCast,brief from album where id=#{id}
+    </select>
+
+    <delete id="deleteAlbum">
+        delete from album where id in
+        <foreach collection="id" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

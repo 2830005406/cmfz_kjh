@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.dao.UserDAO">
+
+    <select id="queryAll" resultType="com.baizhi.entity.User">
+        select * from user
+    </select>
+
+    <select id="queryByPage" resultType="com.baizhi.entity.User">
+        select * from user limit #{start},#{rows}
+    </select>
+
+    <select id="queryTotal" resultType="long">
+        select count(id) from user
+    </select>
+
+    <delete id="deleteUser">
+        delete from user where id in
+        <foreach collection="id" item="id" separator="," close=")" open="(">
+            #{id}
+        </foreach>
+    </delete>
+
+    <insert id="insertUser" parameterType="com.baizhi.entity.User">
+        insert into user values(#{id},#{phoneNumber},#{username},#{password},#{province},#{city},#{nickname},#{sex},#{sign},#{headPic},#{status},#{registDate})
+    </insert>
+
+    <select id="queryOneById" parameterType="int" resultType="com.baizhi.entity.User">
+        select * from user where id={id}
+    </select>
+
+    <update id="updateUser" parameterType="com.baizhi.entity.User">
+        update user set phoneNumber=#{phoneNumber},username=#{username},password=#{password},
+        province=#{province},city=#{city},nickname=#{nickname},sex=#{sex},sign=#{sign},
+        headPic=#{headPic},status=#{status},registDate=#{registDate}
+        where id={id}
+    </update>
+
+</mapper>
